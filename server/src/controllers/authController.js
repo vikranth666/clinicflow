@@ -137,7 +137,36 @@ const login = async (req, res) => {
   }
 };
 
+// GET ME CONTROLLER
+
+const getMe = async(req, res)=>{
+  try{
+    const user = await User.findById(req.user.userId).select("-password");
+
+    if(!user){
+      return res.status(404).json({
+        success:false,
+        message:"User not find"
+      })
+    }
+    res.status(200).json({
+      success:true,
+      data:{
+        user,
+      }
+    })
+  }catch(error){
+    console.error("Get me error:", error)
+
+    res.status(500).json({
+      success:false,
+      message:"Something went wrong"
+    })
+  }
+}
+
 module.exports = {
   register,
   login,
+  getMe,
 };
